@@ -1,0 +1,50 @@
+date,product,region,units_sold,revenue
+05-01-2026,Laptop,Greater Accra,5,5000
+08-01-2026,Phone,Ashanti,12,9600
+12-01-2026,Tablet,Northern,7,4200
+18-01-2026,Monitor,Greater Accra,6,3600
+23-01-2026,Laptop,Ashanti,4,4000
+29-01-2026,Phone,Northern,9,7200
+03-02-2026,Tablet,Greater Accra,8,4800
+07-02-2026,Laptop,Eastern,6,6000
+14-02-2026,Phone,Greater Accra,15,12000
+19-02-2026,Monitor,Ashanti,5,3000
+25-02-2026,Tablet,Eastern,10,6000
+28-02-2026,Laptop,Northern,3,3000
+04-03-2026,Phone,Ashanti,11,8800
+09-03-2026,Laptop,Greater Accra,8,8000
+15-03-2026,Tablet,Northern,6,3600
+21-03-2026,Monitor,Eastern,7,4200
+26-03-2026,Phone,Eastern,13,10400
+30-03-2026,Laptop,Ashanti,5,5000
+05-04-2026,Tablet,Greater Accra,12,7200
+10-04-2026,Phone,Northern,8,6400
+16-04-2026,Laptop,Eastern,7,7000
+22-04-2026,Monitor,Greater Accra,9,5400
+27-04-2026,Phone,Ashanti,14,11200
+30-04-2026,Tablet,Eastern,9,5400
+06-05-2026,Laptop,Northern,6,6000
+11-05-2026,Phone,Greater Accra,18,14400
+17-05-2026,Tablet,Ashanti,11,6600
+23-05-2026,Monitor,Northern,4,2400
+26-05-2026,Laptop,Greater Accra,9,9000
+31-05-2026,Phone,Eastern,10,8000
+04-06-2026,Tablet,Northern,13,7800
+09-06-2026,Laptop,Ashanti,7,7000
+15-06-2026,Phone,Greater Accra,16,12800
+20-06-2026,Monitor,Eastern,8,4800
+25-06-2026,Tablet,Ashanti,10,6000
+29-06-2026,Laptop,Eastern,5,5000
+03-07-2026,Phone,Northern,12,9600
+08-07-2026,Tablet,Greater Accra,14,8400
+14-07-2026,Laptop,Ashanti,8,8000
+19-07-2026,Monitor,Northern,6,3600
+24-07-2026,Phone,Eastern,15,12000
+29-07-2026,Tablet,Ashanti,12,7200
+02-08-2026,Laptop,Greater Accra,10,10000
+07-08-2026,Phone,Ashanti,17,13600
+13-08-2026,Monitor,Eastern,9,5400
+18-08-2026,Tablet,Northern,15,9000
+23-08-2026,Laptop,Eastern,7,7000
+27-08-2026,Phone,Greater Accra,20,16000
+31-08-2026,Tablet,Ashanti,13,7800
