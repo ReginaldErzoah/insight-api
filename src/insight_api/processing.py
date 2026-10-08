@@ -36,6 +36,7 @@ def validate_numeric_columns(sales):
             raise ValueError(
                 f"Column {column} must contain numeric data."
             )
+        
 
 def process_sales_data(sales):
     """Process raw data."""
