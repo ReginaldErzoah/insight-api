@@ -88,3 +88,6 @@ def run_processing_pipeline():
     processed_path = save_processed_data(sales)
 
     return processed_path
+
+if __name__ == "__main__":
+    run_processing_pipeline()
