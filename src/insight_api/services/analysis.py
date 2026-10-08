@@ -1,3 +1,9 @@
+import pandas as pd
+
+sales = pd.read_parquet("data/processed/sales.parquet")
+
+
+
 def calculate_total_revenue(sales):
     """Calculate the total revenue from sales data."""
     return sales["revenue"].sum()
