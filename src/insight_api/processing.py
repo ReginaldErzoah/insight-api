@@ -63,4 +63,12 @@ def process_sales_data(sales):
 
 def save_processed_data(sales):
     """Save processed sales data as a parquet file."""
+
+    PROCESSED_DATA_PATH.parent.mkdir(
+        parents = True,
+        exist_ok = True
+    )
+
     sales.to_parquet(PROCESSED_DATA_PATH)
+
+    return PROCESSED_DATA_PATH
