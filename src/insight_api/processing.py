@@ -13,10 +13,20 @@ def load_raw_data():
     """Load raw sales data from the CSV file."""
     return pd.read_csv(RAW_DATA_PATH)
 
+def validate_columns(sales):
+    missing_columns =[
+        column for column in REQUIRED_COLUMNS
+        if column not in sales.columns
+    ]
 
+    if missing_columns:
+        raise ValueError(
+            f"Missing required columns: {missing_columns}"
+        )
+    
 
 def process_sales_data(sales):
-    """"Process raw data."""
+    """Process raw data."""
     sales = sales.copy()
 
     sales["date"] = pd.to_datetime(sales["date"], format = "%d-%m-%Y")
