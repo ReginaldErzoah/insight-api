@@ -72,3 +72,19 @@ def save_processed_data(sales):
     sales.to_parquet(PROCESSED_DATA_PATH)
 
     return PROCESSED_DATA_PATH
+
+
+def run_processing_pipeline():
+    """Run the complete sales data processing pipeline."""
+
+    sales = load_raw_data()
+
+    validate_columns(sales)
+    validate_numeric_columns(sales)
+    validate_missing_values(sales)
+
+    sales = process_sales_data(sales)
+
+    processed_path = save_processed_data(sales)
+
+    return processed_path
