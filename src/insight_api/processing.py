@@ -14,6 +14,7 @@ def load_raw_data():
     return pd.read_csv(RAW_DATA_PATH)
 
 def validate_columns(sales):
+    """Validate all required columns. """
     missing_columns =[
         column for column in REQUIRED_COLUMNS
         if column not in sales.columns
