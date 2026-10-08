@@ -30,6 +30,7 @@ def validate_columns(sales):
 
 
 def validate_numeric_columns(sales):
+    """Validate numeric columns."""
     for column in NUMERIC_COLUMNS:
         if not pd.api.types.is_numeric_dtype(sales[column]):
             raise ValueError(
