@@ -10,6 +10,7 @@ def test_load_raw_data():
 
 
 def test_validate_columns():
+
     sales = validate_columns()
 
 
