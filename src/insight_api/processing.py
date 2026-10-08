@@ -31,9 +31,9 @@ def validate_columns(sales):
 
 def validate_numeric_columns(sales):
     for column in NUMERIC_COLUMNS:
-        if not pd.api.type.is_numeric_dtype(sales[column]):
+        if not pd.api.types.is_numeric_dtype(sales[column]):
             raise ValueError(
-                f"Column {column} must comtain numeric data."
+                f"Column {column} must contain numeric data."
             )
 
 def process_sales_data(sales):
