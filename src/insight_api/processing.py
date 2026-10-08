@@ -7,6 +7,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "sales.csv"
 
+PROCESSED_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "sales.parquet"
+
 REQUIRED_COLUMNS = ["date","product","region","units_sold","revenue"]
 
 NUMERIC_COLUMNS = ["units_sold","revenue"]
@@ -54,5 +56,6 @@ def process_sales_data(sales):
     sales = sales.copy()
 
     sales["date"] = pd.to_datetime(sales["date"], format = "%d-%m-%Y")
+    sales["month_year"] = sales["date"].dt.to_period("M")
 
     return sales
