@@ -1,5 +1,4 @@
 import pandas as pd
-import pytest
 
 from insight_api.processing import (
     load_raw_data,
