@@ -9,9 +9,12 @@ RAW_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "sales.csv"
 
 REQUIRED_COLUMNS = ["date","product","region","units_sold","revenue"]
 
+NUMERIC_COLUMNS = ["units_sold","revenue"]
+
 def load_raw_data():
     """Load raw sales data from the CSV file."""
     return pd.read_csv(RAW_DATA_PATH)
+
 
 def validate_columns(sales):
     """Validate all required columns. """
@@ -24,7 +27,14 @@ def validate_columns(sales):
         raise ValueError(
             f"Missing required columns: {missing_columns}"
         )
-    
+
+
+def validate_numeric_columns(sales):
+    for column in NUMERIC_COLUMNS:
+        if not pd.api.type.is_numeric_dtype(sales[column]):
+            raise ValueError(
+                f"Column {column} must comtain numeric data."
+            )
 
 def process_sales_data(sales):
     """Process raw data."""
