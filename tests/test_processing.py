@@ -23,3 +23,19 @@ def test_validate_columns():
     assert isinstance(sales,pd.DataFrame)
 
 
+def test_validate_numeric_columns():
+    sales = validate_numeric_columns()
+
+    assert isinstance(sales,pd.DataFrame)
+
+
+def test_validate_missing_values():
+    sales = validate_missing_values()
+
+    assert isinstance(sales,pd.DataFrame)
+
+
+def test_process_sales_data():
+    sales = process_sales_data()
+
+    assert isinstance(sales,pd.DataFrame)
