@@ -59,3 +59,8 @@ def process_sales_data(sales):
     sales["month_year"] = sales["date"].dt.to_period("M")
 
     return sales
+
+
+def save_processed_data(sales):
+    """Save processed sales data as a parquet file."""
+    sales.to_parquet(PROCESSED_DATA_PATH)
