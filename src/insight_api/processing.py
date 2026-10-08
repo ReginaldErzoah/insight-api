@@ -38,6 +38,17 @@ def validate_numeric_columns(sales):
             )
         
 
+def validate_missing_values(sales):
+    """Validate that required sales fields contain no missing values."""
+    missing_values = sales.isna().sum()
+    missing_values = missing_values[missing_values > 0]
+
+    if not missing_values.empty:
+        raise ValueError(
+            f"Missing values found: \n{missing_values}" 
+        )
+
+
 def process_sales_data(sales):
     """Process raw data."""
     sales = sales.copy()
