@@ -54,15 +54,15 @@ def get_sales_by_product():
         ),
         "units_by_product": series_to_dict(
             units_by_product(sales), int
-        )
+        ),
     }
 
 
-@router.get("/sales/by-region")
+@router.get("sales/by-region")
 def get_sales_by_region():
     sales = load_processed_data()
 
-    return {
+    return{
         "revenue_by_region": series_to_dict(
             revenue_by_region(sales), float
         ),
