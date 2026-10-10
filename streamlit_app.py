@@ -31,8 +31,12 @@ def get_api_data(endpoint):
             url,
             timeout=REQUEST_TIMEOUT,
         )
+
         response.raise_for_status()
         return response.json(), None
     
     except requests.RequestException as error:
         return None, str(error)
+
+    except ValueError as error:
+        return None, f"Invalaid JSON reponse: {error}"
