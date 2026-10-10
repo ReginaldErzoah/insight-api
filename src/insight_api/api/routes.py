@@ -36,15 +36,11 @@ def health_check():
 def get_sales_summary():
     sales = load_processed_data()
 
-    return {
+    return{
         "total_revenue": float(total_revenue(sales)),
         "total_units_sold": int(total_units_sold(sales)),
-        "average_revenue_per_record": float(
-            average_revenue_per_record(sales)
-        ),
-        "average_revenue_per_unit": float(
-            average_revenue_per_unit(sales)
-        ),
+        "average_revenue_per_record": float(average_revenue_per_record(sales)),
+        "average_revenue_per_unit": float(average_revenue_per_unit(sales))
     }
 
 
