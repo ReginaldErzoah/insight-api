@@ -44,17 +44,17 @@ def get_sales_summary():
     }
 
 
-@router.get("/sales/by-product")
+@router.get("sales/by-product")
 def get_sales_by_product():
     sales = load_processed_data()
 
-    return {
+    return{
         "revenue_by_product": series_to_dict(
             revenue_by_product(sales), float
         ),
         "units_by_product": series_to_dict(
             units_by_product(sales), int
-        ),
+        )
     }
 
 
