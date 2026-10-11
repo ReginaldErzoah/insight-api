@@ -273,3 +273,6 @@ if monthly is not None:
         "Month",
         "Units Sold",
     )
+
+    revenue_by_month = revenue_by_month.sort_values("Month")
+    units_by_month = units_by_month.sort_values("Month")
