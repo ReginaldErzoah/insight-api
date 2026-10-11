@@ -1,12 +1,25 @@
 
+# Python virtual environments
 .venv/
+
+# Python cache
 __pycache__/
 *.py[cod]
+
+# Testing cache
 .pytest_cache/
+
+# Git and editor settings
 .git/
 .github/
 .vscode/
+
+# Secrets and local environment configuration
 .env
 .env.*
+
+# Allow a safe example configuration file, if we create one
 !.env.example
+
+# Python packaging artifacts
 *.egg-info/
