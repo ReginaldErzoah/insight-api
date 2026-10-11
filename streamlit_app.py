@@ -83,3 +83,13 @@ def series_to_dict(data, category_name, value_name):
         value_name,
         ascending=False,
     ).reset_index(drop=True)
+
+
+def show_metric(label, value, help_text = None):
+    """Dispaly a consistently formatted KPI."""
+
+    st.metric(
+        label = label,
+        value = value,
+        help = help_text,
+    )
