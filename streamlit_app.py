@@ -463,3 +463,38 @@ with monthly_tab:
     else:
         st.info("Monthly units sold data unavailable")
 
+
+with data_tab:
+    st.subheader("Explore Sales Data")
+
+    st.markdown(
+        """
+        Inspect the aggregated datasets returned by the InsightAPI backend.
+        """
+    )
+
+    st.markdown("##### Revenue by Product")
+
+    if not revenue_by_region.empty:
+        st.dataframe(
+            revenue_by_product,
+            use_container_width=True,
+            hide_index=True,
+        )
+    else:
+        st.info("Product revenue data is unavailable.")
+
+    st.divider()
+
+    st.markdown("##### Revenue by Region")
+
+    if not revenue_by_region.empty:
+        st.dataframe(
+            revenue_by_region,
+            use_container_width=True,
+            hide_index=True,
+        )
+    else:
+        st.info("Regional revenue data is unavailable.")
+
+    st.divider()
