@@ -1,9 +1,11 @@
-
-name: Insight API CI
+name: Insight API CI/CD
 
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test-and-build:
@@ -30,7 +32,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t insight-api:ci .
 
-        
       - name: Validate Docker Compose configuration
         run: docker compose config --quiet
 
@@ -65,3 +66,71 @@ jobs:
         if: always()
         run: docker compose down
 
+  deploy:
+    name: Deploy to Google Cloud Run
+    needs: test-and-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      REGION: africa-south1
+      REPOSITORY: insight-api
+      IMAGE_NAME: insight-api
+      IMAGE: africa-south1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/insight-api/insight-api:${{ github.sha }}
+      RUNTIME_SERVICE_ACCOUNT: 854268296659-compute@developer.gserviceaccount.com
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud using Workload Identity Federation
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SERVICE_ACCOUNT }}
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      - name: Configure Docker authentication
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Build production Docker image
+        run: docker build --tag "$IMAGE" .
+
+      - name: Push image to Artifact Registry
+        run: docker push "$IMAGE"
+
+      - name: Deploy API to Cloud Run
+        run: |
+          gcloud run deploy insight-api \
+            --image "$IMAGE" \
+            --project "$PROJECT_ID" \
+            --region "$REGION" \
+            --port 8000 \
+            --service-account "$RUNTIME_SERVICE_ACCOUNT" \
+            --quiet
+
+      - name: Update dashboard image
+        run: |
+          sed -i -E \
+            "s|^([[:space:]]*-[[:space:]]*image:[[:space:]]*).*$|\1${IMAGE}|" \
+            dashboard-service.yaml
+
+          echo "Dashboard image configured as:"
+          grep -n 'image:' dashboard-service.yaml
+
+      - name: Deploy dashboard to Cloud Run
+        run: |
+          gcloud run services replace dashboard-service.yaml \
+            --project "$PROJECT_ID" \
+            --region "$REGION" \
+            --quiet
