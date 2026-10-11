@@ -152,3 +152,15 @@ if not api_is_healthy:
     )
 
     st.stop()
+
+
+summary, summary_error = get_api_data("/sales/summary")
+
+products, products_error = get_api_data("/sales/by-product")
+
+regions, regions_error = get_api_data("/sales/by-region")
+
+monthly, monthly_error = get_api_data("/sales/by-month")
+
+top_product_data, top_product_error = get_api_data("/sales/top-product")
+
