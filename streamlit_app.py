@@ -370,4 +370,35 @@ with overview_tab:
         )
     else:
         st.info("Monthly revenue data is unavailable.")
-                            
+
+
+with product_tab:
+    st.subheader("Product Performance")
+
+    revenue_column, units_column = st.columns(2)
+
+    with revenue_column:
+        st.markdown("##### Revenue by Product")
+
+        if not revenue_by_product.empty:
+            chart_data = revenue_by_product.set_index("Product")
+
+            st.bar_chart(
+                chart_data,
+                y = "Revenue",
+            )
+        else:
+            st.info("Product revenue data is unavailable.")
+
+        with units_column:
+            st.markdown("##### Units Sold by Product")
+
+            if not units_by_product.empty:
+                chart_data = units_by_product.set_index("Product")
+
+                st.bar_chart(
+                    chart_data,
+                    y = "Units Sold",
+                )
+            else:
+                st.info("Products units sold data is unavailable.")
