@@ -594,6 +594,7 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "pandas" },
     { name = "pyarrow" },
+    { name = "python-dotenv" },
     { name = "requests" },
     { name = "streamlit" },
 ]
@@ -609,6 +610,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.143.0" },
     { name = "pandas", specifier = ">=3.0.6" },
     { name = "pyarrow", specifier = ">=25.0.1" },
+    { name = "python-dotenv", specifier = ">=1.2.4" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "streamlit", specifier = ">=1.65.0" },
 ]

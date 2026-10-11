@@ -3,7 +3,9 @@ import os
 import pandas as pd
 import requests
 import streamlit as st
+from dotenv import load_dotenv
 
+load_dotenv()
 
 API_BASE_URL = os.getenv(
     "API_BASE_URL",
