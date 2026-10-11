@@ -331,9 +331,9 @@ overview_tab, product_tab, region_tab, monthly_tab, data_tab = st.tabs(
 with overview_tab:
     st.subheader("Sales performance at a glance")
 
-    chart_column, region_column = st.columns(2)
+    product_column, region_column = st.columns(2)
 
-    with chart_column:
+    with product_column:
         st.markdown("##### Revenue by Product")
 
         if not revenue_by_product.empty:
@@ -345,4 +345,6 @@ with overview_tab:
             )
         else:
             st.info("Product revenue data is unavailable.")
+
+    
                             
