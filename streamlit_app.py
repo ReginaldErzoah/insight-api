@@ -107,7 +107,7 @@ def show_metric(label, value, help_text = None):
 
 
 with st.sidebar:
-    st.title("insightAPI")
+    st.title("InsightAPI")
     st.caption("Sales Analytics Platform")
 
     st.divider()
