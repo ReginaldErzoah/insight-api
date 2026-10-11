@@ -199,3 +199,11 @@ if monthly is not None and not isinstance(monthly,dict):
 if top_product_data is not None and not isinstance(top_product_data,dict):
     st.warning("The top product endpoint returned an unexpected response.")
     top_product_data = None
+
+if (summary is None and products is None and regions is None and monthly is None):
+    st.error(
+        "No sales data could be loaded. Check the API logs"
+        "and try refreshing the dashboard."
+    )
+    st.stop()
+
