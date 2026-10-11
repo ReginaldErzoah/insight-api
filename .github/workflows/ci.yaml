@@ -29,3 +29,39 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t insight-api:ci .
+
+        
+      - name: Validate Docker Compose configuration
+        run: docker compose config --quiet
+
+      - name: Start application services
+        run: docker compose up -d --build
+
+      - name: Verify API health
+        run: |
+          for i in $(seq 1 30); do
+            if curl --fail http://localhost:8000/health; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "API health check failed"
+          docker compose logs
+          exit 1
+
+      - name: Verify dashboard responds
+        run: |
+          for i in $(seq 1 30); do
+            if curl --fail http://localhost:8501/; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Dashboard health check failed"
+          docker compose logs
+          exit 1
+
+      - name: Stop application services
+        if: always()
+        run: docker compose down
+
