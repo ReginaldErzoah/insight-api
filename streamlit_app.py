@@ -138,3 +138,17 @@ st.markdown(
 )
 
 st.caption("Data Source: FastAPI sales analytics endpoints")
+
+
+if not api_is_healthy:
+    st.error(
+        "The dashboard cannot retrieve live data because"
+        "the backend health check failed."
+    )
+
+    st.info(
+        "In another terminal, start the API with:"
+        "`uv run uvicorn insight_api.main:app --reload"
+    )
+
+    st.stop()
