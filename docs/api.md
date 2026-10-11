@@ -14,13 +14,11 @@ http://127.0.0.1:8000
 
 ### Production
 
-The deployed API is available at:
+The deployed API is available on Google Cloud Run.
 
 - **API base URL:** https://insight-api-vk5ztwb7gq-bq.a.run.app
 - **Interactive API documentation:** https://insight-api-vk5ztwb7gq-bq.a.run.app/docs
 - **Health check:** https://insight-api-vk5ztwb7gq-bq.a.run.app/health
-
-The production API is deployed on Google Cloud Run.
 
 ## Endpoints
 
@@ -30,7 +28,7 @@ All six endpoints use the HTTP `GET` method.
 
 **Endpoint:** `GET /health`
 
-Checks whether the API is responding.
+Checks whether the API's health endpoint is responding.
 
 **Example response:**
 
@@ -40,7 +38,7 @@ Checks whether the API is responding.
 }
 ```
 
-**Try it:** [Production health check](https://insight-api-vk5ztwb7gq-bq.a.run.app/health)
+**Try it:** https://insight-api-vk5ztwb7gq-bq.a.run.app/health
 
 ### 2. Sales Summary
 
@@ -68,9 +66,9 @@ Returns the main sales performance metrics across the available sales records.
 }
 ```
 
-These values reflect the dataset currently used by the deployed API.
+These values reflect the dataset used when this example was recorded. They may change if the processed data changes.
 
-**Try it:** [Sales summary](https://insight-api-vk5ztwb7gq-bq.a.run.app/sales/summary)
+**Try it:** https://insight-api-vk5ztwb7gq-bq.a.run.app/sales/summary
 
 ### 3. Sales by Product
 
@@ -98,7 +96,7 @@ Returns aggregated revenue and units sold for each product.
 }
 ```
 
-The product names and values above are illustrative.
+The product names and values above are illustrative and are not guaranteed to match the deployed dataset.
 
 ### 4. Sales by Region
 
@@ -111,7 +109,7 @@ Returns aggregated revenue and units sold for each region.
 - `revenue_by_region`: Revenue grouped by region.
 - `units_by_region`: Units sold grouped by region.
 
-The response contains the aggregated results for the regions represented in the processed dataset.
+The response contains aggregated results for the regions represented in the processed dataset.
 
 ### 5. Sales by Month
 
@@ -144,7 +142,7 @@ Returns the product with the highest total revenue.
 }
 ```
 
-The product name above is illustrative.
+The product name above is illustrative and may differ from the actual result.
 
 ## How to Test the Endpoints
 
@@ -160,7 +158,7 @@ FastAPI automatically generates interactive API documentation.
 
 ### Option 2: Using curl
 
-To test the local API, first start it from the project root:
+To test the local API, run this command from the project root:
 
 ```bash
 uv run uvicorn insight_api.main:app --reload
@@ -196,13 +194,27 @@ You can open the production health check and sales summary endpoints directly in
 
 At a high level, the API follows this flow:
 
-1. **Data processing:** The raw sales data is processed and saved as a Parquet file.
+1. **Data processing:** Raw sales data is processed and saved as a Parquet file.
 2. **Data access:** The data access layer loads the processed data.
 3. **Business logic:** The analytics service calculates the requested metrics.
 4. **API routes:** FastAPI exposes the analytics through HTTP endpoints.
-5. **JSON response:** The API returns the results to clients, including the Streamlit dashboard.
+5. **JSON response:** The API returns results to clients, including the Streamlit dashboard.
 
 The API reads from the processed dataset rather than accepting sales records for creation or modification.
+
+## Deployment and Continuous Integration
+
+The API is containerised with Docker and deployed to Google Cloud Run.
+
+GitHub Actions automates testing and deployment:
+
+1. On pushes and pull requests, the CI workflow installs dependencies, runs tests, builds the Docker image, validates Docker Compose, and checks that the API and dashboard respond.
+2. For pushes to the `main` branch, the deployment job runs only after CI succeeds.
+3. The workflow authenticates to Google Cloud using Workload Identity Federation.
+4. It builds a Docker image tagged with the Git commit SHA and pushes it to Google Artifact Registry.
+5. It deploys the API to Cloud Run and then updates the dashboard service to use the same image with its own startup command and port.
+
+The deployed API can be accessed independently of the Streamlit dashboard.
 
 ## Notes and Limitations
 
@@ -210,6 +222,6 @@ The API reads from the processed dataset rather than accepting sales records for
 - Successful analytics responses are returned in JSON format.
 - Analytics depend on the processed Parquet file being available and readable.
 - The API currently provides read-only sales analytics.
-- The API's health check confirms that the health endpoint responds; it does not necessarily verify that the processed dataset is available or that every analytics endpoint is working.
-- The examples marked illustrative are not guaranteed to match the current dataset.
-- The deployed API runs on Google Cloud Run, which can incur charges depending on usage and associated cloud resources.
+- The health check confirms that the health endpoint responds. It does not necessarily verify that the processed dataset is available or that every analytics endpoint is working.
+- Examples marked illustrative are not guaranteed to match the current dataset.
+- The API runs on Google Cloud Run. Usage and associated cloud resources may incur charges.
