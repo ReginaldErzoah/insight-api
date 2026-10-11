@@ -1,0 +1,32 @@
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: insight-dashboard
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "1"
+    spec:
+      containers:
+        - image: africa-south1-docker.pkg.dev/insight-api-511309/insight-api/insight-api:v1
+          command:
+            - uv
+          args:
+            - run
+            - --no-sync
+            - streamlit
+            - run
+            - streamlit_app.py
+            - --server.address=0.0.0.0
+            - --server.port=8080
+          ports:
+            - containerPort: 8080
+          env:
+            - name: API_BASE_URL
+              value: https://insight-api-vk5ztwb7gq-bq.a.run.app
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
