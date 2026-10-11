@@ -164,3 +164,17 @@ monthly, monthly_error = get_api_data("/sales/by-month")
 
 top_product_data, top_product_error = get_api_data("/sales/top-product")
 
+
+endpoint_errors = {
+    "Sales summary": summary_error,
+    "Product analysis": products_error,
+    "Regional analysis": regions_error,
+    "Monthly analysis": monthly_error,
+    "Top product": top_product_error,
+}
+
+for endpoint_name, error in endpoint_errors.items():
+    if error:
+        st.warning(
+            f"{endpoint_name} could not be loaded: {error}"
+        )
