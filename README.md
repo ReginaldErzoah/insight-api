@@ -2,22 +2,22 @@
 
 **A containerised sales analytics application built with FastAPI and Streamlit, deployed on Google Cloud Run.**
 
-Insight API processes sales data, exposes business metrics through a REST API, and presents those insights through an interactive dashboard. The project demonstrates how data processing, analytical logic, API services, and user interfaces can be developed, tested, containerised, and deployed as separate components.
+Insight API processes sales data, exposes business metrics through a REST API, and presents those insights through an interactive dashboard. The project demonstrates how data processing, analytical logic, API services, and user interfaces can be developed, tested, containerised, and deployed using modern software engineering and DevOps practices.
 
 ## Live Application
 
 - **Interactive dashboard:** [Open Insight Dashboard](https://insight-dashboard-854268296659.africa-south1.run.app)
 - **REST API:** [Open Insight API](https://insight-api-vk5ztwb7gq-bq.a.run.app)
 - **Interactive API documentation:** [Explore API endpoints](https://insight-api-vk5ztwb7gq-bq.a.run.app/docs)
-- **Health check:** [Check API health](https://insight-api-vk5ztwb7gq-bq.a.run.app/health)
+- **API health check:** [Check API health](https://insight-api-vk5ztwb7gq-bq.a.run.app/health)
 
-The dashboard communicates with the deployed API to retrieve sales analytics. Both applications run as separate services on Google Cloud Run.
+The dashboard communicates with the deployed API to retrieve sales analytics. The API and dashboard run as separate services on Google Cloud Run.
 
 ## Why Not Just Use Power BI?
 
 I could have built a sales analytics dashboard in Power BI in a few hours. So why spend days building an API, a data pipeline, automated tests, containers, and a separate frontend?
 
-Because my goal goes beyond creating dashboards. I want to understand how data systems work behind the scenes—from processing and validating data to designing APIs, testing applications, and deploying reliable services.
+Because my goal goes beyond creating dashboards. I want to understand how data systems work behind the scenes—from processing and validating data to designing APIs, testing applications, automating deployments, and operating reliable services.
 
 **Power BI helps me communicate insights. Insight API helps me learn to engineer the systems that deliver them.**
 
@@ -28,59 +28,115 @@ This project is part of my journey toward Data Engineering, DataOps, and MLOps, 
 - **Sales data processing:** Loads raw sales data from CSV, validates required columns and numeric fields, checks for missing values, and derives monthly reporting periods.
 - **Processed data storage:** Stores processed sales data in Parquet format.
 - **REST API:** Exposes sales metrics and aggregations through FastAPI.
-- **Interactive dashboard:** Uses Streamlit to present key performance indicators and sales breakdowns.
+- **Interactive dashboard:** Uses Streamlit to present key performance indicators, charts, and sales breakdowns.
 - **Separation of concerns:** Organises data processing, data access, analytical functions, API routes, and presentation into distinct components.
 - **Automated testing:** Uses pytest to test data processing, data loading, analytical functions, and API responses.
 - **Containerisation:** Packages the application using Docker, with separate configurations for the API and dashboard services.
 - **Local orchestration:** Uses Docker Compose to run the application services together during development.
 - **Cloud deployment:** Hosts the API and dashboard as separate services on Google Cloud Run.
-- **Continuous integration:** Uses GitHub Actions to automate configured project checks.
+- **Continuous integration:** Uses GitHub Actions to run tests, build the Docker image, validate Docker Compose, and check local service responses.
+- **Continuous deployment:** Automatically builds and pushes a commit-specific image to Google Artifact Registry and deploys the API and dashboard to Cloud Run after successful CI on pushes to `main`.
+- **Secure cloud authentication:** Uses Workload Identity Federation to authenticate GitHub Actions to Google Cloud without storing a long-lived service-account key in GitHub.
 
 ## Architecture
 
+### Application architecture
+
 ```text
-                    Sales CSV
-                        |
-                        v
-               Data Processing
-             Validation and Cleaning
-                        |
-                        v
-                 Sales Parquet
-                        |
-                        v
-                Data Access Layer
-                        |
-                        v
-                 Analysis Services
-                        |
-                        v
-                   FastAPI
-                 REST Endpoints
-                        ^
-                        |
-                 HTTP Requests
-                        |
-                        |
-                 Streamlit UI
-                 Sales Dashboard
-                        |
-                        v
+              Raw Sales Data (CSV)
+                       |
+                       v
+              Data Processing
+          Validation and Transformation
+                       |
+                       v
+              Processed Data (Parquet)
+                       |
+                       v
+                Data Access
+                       |
+                       v
+              Analytics Services
+                       |
+                       v
+                  FastAPI
+                REST Endpoints
+                       ^
+                       |
+                  HTTP Requests
+                       |
+                       |
+                Streamlit UI
+                Sales Dashboard
+                       |
+                       v
                      User
 ```
 
-The API and dashboard are packaged as separate containerised services and deployed independently to Google Cloud Run.
+The API provides analytical results as JSON responses. The Streamlit dashboard requests those results over HTTP and presents them to users.
 
-The dashboard uses the `API_BASE_URL` environment variable to determine which API to call. In local development, this can point to the local API or the API service in Docker Compose. In the cloud, it points to the deployed FastAPI service.
+### CI/CD and deployment architecture
 
-See [System Architecture](docs/architecture.md) for more details.
+```text
+             GitHub Repository
+                      |
+                      v
+               GitHub Actions
+                      |
+             +--------+--------+
+             |                 |
+             v                 v
+        Install and        Build Docker
+        Run Tests             Image
+             |                 |
+             +--------+--------+
+                      |
+                      v
+            Validate Compose Setup
+                      |
+                      v
+            Start and Check Services
+                      |
+                      v
+            CI Job Must Succeed
+                      |
+                      v
+          Push to main Branch Only
+                      |
+                      v
+       Authenticate Using Workload
+            Identity Federation
+                      |
+                      v
+          Build Commit-Specific Image
+                      |
+                      v
+             Artifact Registry
+                      |
+              +-------+-------+
+              |               |
+              v               v
+          Cloud Run API   Cloud Run Dashboard
+              |               |
+              +-------+-------+
+                      |
+                      v
+               Live Application
+```
+
+The API and dashboard use the same Docker image with different startup commands and port configurations. They are deployed as separate Cloud Run services.
+
+The dashboard uses the `API_BASE_URL` environment variable to determine which API to call. This allows it to communicate with a local API during development, an API container through Docker Compose, or the deployed API in the cloud.
+
+See [System Architecture](docs/architecture.md) for further details.
 
 ## Technology Stack
 
 | Area | Technologies |
 |---|---|
-| Language | Python |
-| API | FastAPI, Uvicorn |
+| Programming language | Python 3.12 |
+| API framework | FastAPI |
+| ASGI server | Uvicorn |
 | Dashboard | Streamlit |
 | Data processing | Pandas |
 | Data storage | CSV, Parquet, PyArrow |
@@ -91,15 +147,16 @@ See [System Architecture](docs/architecture.md) for more details.
 | Local orchestration | Docker Compose |
 | Container registry | Google Artifact Registry |
 | Cloud deployment | Google Cloud Run |
-| Continuous integration | GitHub Actions |
+| CI/CD automation | GitHub Actions |
+| Cloud authentication | Workload Identity Federation |
 
 ## API Endpoints
 
-All endpoints use the HTTP `GET` method.
+All sales endpoints use the HTTP `GET` method.
 
 | Endpoint | Description |
 |---|---|
-| `/health` | Checks API health |
+| `/health` | Checks basic API health |
 | `/sales/summary` | Returns key sales metrics |
 | `/sales/by-product` | Returns revenue and units sold by product |
 | `/sales/by-region` | Returns revenue and units sold by region |
@@ -126,9 +183,9 @@ Example response:
 }
 ```
 
-These values represent the response observed during deployment verification. The results depend on the dataset currently loaded by the application.
+These values reflect a response observed during deployment verification. Actual results depend on the dataset currently loaded by the application.
 
-For endpoint details and response examples, see the [API Reference](docs/api.md).
+For endpoint details, example responses, and testing instructions, see the [API Reference](docs/api.md).
 
 ## Project Structure
 
@@ -156,6 +213,7 @@ insight-api/
 ├── tests/
 ├── .github/
 │   └── workflows/
+│       └── ci.yaml
 ├── .dockerignore
 ├── .gitignore
 ├── Dockerfile
@@ -167,16 +225,34 @@ insight-api/
 └── README.md
 ```
 
+### Key components
+
+| Component | Responsibility |
+|---|---|
+| `processing.py` | Validates and transforms raw sales data |
+| `data_access/` | Loads the processed dataset |
+| `services/` | Contains sales analytics and business logic |
+| `api/routes.py` | Defines API endpoints |
+| `main.py` | Creates the FastAPI application |
+| `streamlit_app.py` | Provides the interactive dashboard |
+| `tests/` | Contains automated tests |
+| `Dockerfile` | Defines how to build the application image |
+| `compose.yaml` | Defines the local multi-service container setup |
+| `dashboard-service.yaml` | Defines the dashboard's Cloud Run configuration |
+| `.github/workflows/ci.yaml` | Defines automated checks and deployment |
+
 ## Getting Started
 
 ### Prerequisites
 
 Install the following tools:
 
-- Python 3.12 or a compatible version supported by `pyproject.toml`
+- Python 3.12
 - [uv](https://docs.astral.sh/uv/)
 - [Git](https://git-scm.com/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) for containerised development
+
+Docker is optional when running the application directly through Python.
 
 ### 1. Clone the repository
 
@@ -188,10 +264,16 @@ cd insight-api
 ### 2. Install dependencies
 
 ```bash
-uv sync
+uv sync --locked --group dev
 ```
 
-The `uv.lock` file helps maintain reproducible dependency versions.
+This installs the project dependencies, including the development dependency group, using the versions recorded in `uv.lock`.
+
+Verify the Python version:
+
+```bash
+uv run python --version
+```
 
 ### 3. Process the sales data
 
@@ -199,9 +281,9 @@ The `uv.lock` file helps maintain reproducible dependency versions.
 uv run python -m insight_api.processing
 ```
 
-This runs the processing module to validate the raw sales data and generate the processed Parquet file.
+This validates the raw sales data and generates the processed Parquet dataset.
 
-Ensure the expected input data exists before running the pipeline.
+Ensure the expected input file, `data/raw/sales.csv`, exists before running the pipeline.
 
 ### 4. Start the API
 
@@ -225,43 +307,43 @@ uv run streamlit run streamlit_app.py
 
 Streamlit will display its local URL, usually http://localhost:8501.
 
-The dashboard requires the API to be running and configured at the correct address.
+The API must be running, and the dashboard must be configured to use the correct API address.
 
 ### 6. Configure the API URL
 
-The dashboard uses `API_BASE_URL` to determine the API base address.
+For local development, the dashboard's `API_BASE_URL` should point to the local API:
 
-For local development, the value is typically:
-
-```dotenv
+```text
 API_BASE_URL=http://127.0.0.1:8000
 ```
 
-For Docker Compose, the API service can be addressed by its service name, such as `http://api:8000`, when that matches the Compose configuration.
+For Docker Compose, use the API service's name and internal port. For example, if the service is named `api`:
+
+```text
+API_BASE_URL=http://api:8000
+```
 
 For the deployed dashboard, the configured value is:
 
 ```text
-https://insight-api-vk5ztwb7gq-bq.a.run.app
+API_BASE_URL=https://insight-api-vk5ztwb7gq-bq.a.run.app
 ```
 
-Set environment variables using your chosen development or deployment configuration. Keep local `.env` files and credentials out of version control.
+Configure the variable using the mechanism supported by the application and your development environment. Keep local `.env` files and credentials out of version control.
 
 ## Running Tests
 
-Run the test suite with:
+Run the automated test suite:
 
 ```bash
-uv run pytest
+uv run --locked pytest
 ```
 
-The tests cover data processing, processed-data loading, analytical functions, and API response structures.
+Run tests before committing changes to catch regressions early.
 
-Run tests before committing changes so regressions are caught early.
+The CI workflow also runs the tests automatically on pushes and pull requests.
 
 ## Running with Docker
-
-Docker provides a consistent environment for running the application beyond your local Python setup.
 
 Build the image:
 
@@ -277,52 +359,51 @@ docker run --rm -p 8000:8000 insight-api:local
 
 The API should then be available at http://localhost:8000.
 
-To run the API and dashboard together using the project's Docker Compose configuration:
+To run the services together using Docker Compose:
 
 ```bash
 docker compose up --build
 ```
 
-Use `Ctrl+C` to stop the running services. To stop and remove the Compose containers and network, run:
+To stop and remove the Compose containers and network:
 
 ```bash
 docker compose down
 ```
 
-Refer to the Dockerfile and Compose configuration for the exact service commands, ports, and environment variables.
+See [Development Guide](docs/development.md) for more details about local setup, Docker networking, testing, and troubleshooting.
 
-## Deployment
+## CI/CD and Cloud Deployment
 
-Insight API is deployed on Google Cloud Run using separate services for the FastAPI backend and Streamlit dashboard.
+Insight API uses GitHub Actions to automate testing and deployment to Google Cloud Run.
 
-### Deployment components
+### Continuous integration
 
-- **Google Artifact Registry:** Stores the Docker image.
-- **Cloud Run — API:** Runs the FastAPI application on port `8000`.
-- **Cloud Run — dashboard:** Runs the Streamlit application on port `8080`.
-- **Environment configuration:** Connects the dashboard to the deployed API using `API_BASE_URL`.
+The CI job runs on pushes and pull requests. It:
 
-### Current deployment URLs
+1. Checks out the repository.
+2. Sets up Python and uv.
+3. Installs dependencies.
+4. Runs automated tests.
+5. Builds the Docker image.
+6. Validates the Docker Compose configuration.
+7. Starts the API and dashboard.
+8. Checks that both local services respond.
 
-| Service | URL |
-|---|---|
-| API | https://insight-api-vk5ztwb7gq-bq.a.run.app |
-| Dashboard | https://insight-dashboard-854268296659.africa-south1.run.app |
+### Continuous deployment
 
-### Current deployment workflow
+When a push to `main` occurs and the CI job succeeds, the deployment job:
 
-The initial deployment was performed manually:
+1. Authenticates to Google Cloud using Workload Identity Federation.
+2. Builds a Docker image tagged with the commit SHA.
+3. Pushes the image to Google Artifact Registry.
+4. Deploys the API service to Cloud Run.
+5. Updates the dashboard configuration to use the same image.
+6. Deploys the dashboard service to Cloud Run.
 
-1. Build the Docker image.
-2. Tag and push the image to Google Artifact Registry.
-3. Deploy the API service to Cloud Run.
-4. Deploy the dashboard service with its Streamlit startup command.
-5. Configure public access and the dashboard's API URL.
-6. Verify the health and sales summary endpoints and open the dashboard.
+This provides a repeatable path from code changes to a deployed application without requiring a long-lived Google Cloud service-account key in GitHub.
 
-GitHub Actions currently supports configured CI checks. Automatic deployment from GitHub to Cloud Run has not yet been configured.
-
-See the [Development Guide](docs/development.md) for development commands and the deployment documentation for the current manual workflow.
+The current workflow checks the local services before deployment. Post-deployment smoke tests and automated rollback procedures remain potential improvements.
 
 **Cost note:** Cloud Run and Artifact Registry may incur charges depending on usage, region, storage, and data transfer. Budget alerts are notifications, not hard spending limits.
 
@@ -340,23 +421,28 @@ See the [Development Guide](docs/development.md) for development commands and th
 - [x] Add automated tests using pytest.
 - [x] Containerise the application with Docker.
 - [x] Run the API and dashboard as separate services.
-- [x] Publish a container image to Google Artifact Registry.
+- [x] Publish container images to Google Artifact Registry.
 - [x] Deploy the API and dashboard to Google Cloud Run.
-- [x] Verify the deployed API endpoints and dashboard.
+- [x] Automate CI checks with GitHub Actions.
+- [x] Automate deployment to Cloud Run from successful pushes to `main`.
 - [ ] Expand test coverage and strengthen data validation.
-- [ ] Improve operational logging, error handling, and observability.
-- [ ] Automate image publishing and Cloud Run deployment with GitHub Actions.
-- [ ] Add deployment verification and rollback procedures.
-- [ ] Explore monitoring, performance, and reliability improvements.
+- [ ] Add post-deployment smoke tests.
+- [ ] Improve structured logging, error handling, and observability.
+- [ ] Introduce deployment rollback procedures.
+- [ ] Improve monitoring, performance, and reliability.
+- [ ] Explore automated data pipeline execution and data quality monitoring.
 
 ## Project Status
 
 Insight API is an active learning and portfolio project focused on practical data applications and software engineering.
 
-The first cloud deployment is complete. The next phase focuses on improving reliability, automating deployment, and building stronger operational practices.
+The application has a deployed API and dashboard, containerised services, automated tests, and a GitHub Actions pipeline that performs CI/CD.
+
+The next phase focuses on strengthening reliability, observability, data quality, and operational practices as the project evolves.
 
 ## Author
 
 **Reginald Erzoah**
 
-GitHub: [ReginaldErzoah](https://github.com/ReginaldErzoah)
+- GitHub: [ReginaldErzoah](https://github.com/ReginaldErzoah)
+- Portfolio: [reginalderzoah.github.io](https://reginalderzoah.github.io)
