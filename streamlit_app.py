@@ -359,5 +359,15 @@ with overview_tab:
         else:
             st.info("Regional revenue data is unavailable.")
 
-    
+    st.markdown("##### Monthly Revenue Trend")
+
+    if not revenue_by_month.empty:
+        chart_data = revenue_by_month.set_index("Month")
+
+        st.line_chart(
+            chart_data,
+            y="Revenue",
+        )
+    else:
+        st.info("Monthly revenue data is unavailable.")
                             
