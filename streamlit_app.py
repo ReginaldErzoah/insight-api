@@ -283,4 +283,41 @@ st.subheader("Business Overview")
 if summary is not None:
     metric_columns = st.columns(4)
 
-    
+    with metric_columns[0]:
+        show_metric(
+            "Total Revenue",
+            f"{float(summary["total_revenue"]):,.2f}",
+            "Sum of revenue across the availabe sales records.",
+        )
+
+    with metric_columns[1]:
+            show_metric(
+                "Units Sold",
+                f"{int(summary["total_units_sold"]):,.2f}",
+                "Total units sold across the available records",
+            )
+
+    with metric_columns[2]:
+        show_metric(
+            "Average Revenue per Record",
+            f"{float(summary["average_revenue_per_record"]):,.2f}",
+            "Average revenue for each sales record.",
+        )
+
+    with metric_columns[3]:
+        show_metric(
+            "Average Revenue per Unit",
+            f"{float(summary["average_revenue_per_unit"]):,.2f}",
+            "Total revenue divided by total units sold."
+        )
+
+else:
+    st.info("Business overview metrics are currently unavilable.")
+
+if top_product_data is not None:
+    best_product = top_product_data.get("top_product")
+
+    if best_product is not None:
+        st.success(f"Top product by revenue: **{best_product}**")
+                   
+st.divider()
