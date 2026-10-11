@@ -57,3 +57,29 @@ def check_api_health():
         return False, "The API health check did not report healthy status."
 
     return True, None
+
+
+def series_to_dict(data, category_name, value_name):
+    """Convert an API dictionary into a chart-ready DataFrame."""
+
+    if not isinstance(data,dict) or not data:
+        return pd.DataFrame(
+            columns = [category_name, value_name]
+        )
+
+    frame = pd.DataFrame(
+        list(data.items()),
+        columns = [category_name, value_name],
+    )
+
+    frame[value_name] = pd.to_numeric(
+        frame[value_name],
+        errors = "coerce"
+    )
+
+    frame = frame.dropna(subset=[value_name])
+
+    return frame.sort_values(
+        value_name,
+        ascending=False,
+    ).reset_index(drop=True)
