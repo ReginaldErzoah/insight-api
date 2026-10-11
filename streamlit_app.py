@@ -461,4 +461,5 @@ with monthly_tab:
             y = "Units Sold",
         )
     else:
-        st.info("Monthly units sold data unavailble")
+        st.info("Monthly units sold data unavailable")
+
