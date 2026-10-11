@@ -44,7 +44,7 @@ def get_sales_summary():
     }
 
 
-@router.get("sales/by-product")
+@router.get("/sales/by-product")
 def get_sales_by_product():
     sales = load_processed_data()
 
@@ -58,7 +58,7 @@ def get_sales_by_product():
     }
 
 
-@router.get("sales/by-region")
+@router.get("/sales/by-region")
 def get_sales_by_region():
     sales = load_processed_data()
 
