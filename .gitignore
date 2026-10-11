@@ -1,22 +1,42 @@
-# Virtual environment
-.venv/
 
-# Python cache
+# Python bytecode
 __pycache__/
 *.py[cod]
+*$py.class
 
-# Testing
-.pytest_cache/
+# Virtual environments
+.venv/
+venv/
+env/
 
 # Environment variables and secrets
 .env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*service-account*.json
 
-# IDE
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Logs
+*.log
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# IDE and operating system files
 .vscode/
-
-# OS files
+.idea/
 .DS_Store
 Thumbs.db
-
-# Python packaging
-*.egg-info/
