@@ -37,11 +37,20 @@ def get_api_data(endpoint):
         response.raise_for_status()
         return response.json(), None
     
-    except requests.RequestException as error:
-        return None, str(error)
+    except requests.exceptions.Timeout:
+        return None, f"Request timed out while calling {url}"
+
+    except requests.exceptions.ConnectionError:
+        return None, f"Could not connect to the API at {url}"
+
+    except requests.exceptions.HTTPError as error:
+        return None, f"API returned an HTTP error: {error}"
+
+    except requests.exceptions.RequestException as error:
+        return None, f"Request failed: {error}"
 
     except ValueError as error:
-        return None, f"Invalaid JSON reponse: {error}"
+        return None, f"Invalid JSON response: {error}"
 
 
 def check_api_health():
