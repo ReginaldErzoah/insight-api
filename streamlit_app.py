@@ -40,3 +40,20 @@ def get_api_data(endpoint):
 
     except ValueError as error:
         return None, f"Invalaid JSON reponse: {error}"
+
+
+def check_api_health():
+    """Check whether backend is responding."""
+
+    data,error = get_api_data("/health")
+
+    if error:
+        return False, error
+
+    if not isinstance(data, dict):
+        return False, "The API returned an unexpected health response."
+
+    if data.get("status") != "healthy":
+        return False, "The API health check did not report healthy status."
+
+    return True, None
