@@ -402,3 +402,35 @@ with product_tab:
                 )
             else:
                 st.info("Products units sold data is unavailable.")
+
+
+with region_tab:
+    st.subheader("Regional Performance")
+
+    revenue_column, units_column = st.columns(2)
+
+    with revenue_column:
+        st.markdown("##### Revenue by Region")
+
+        if not revenue_by_region.empty:
+            chart_data = revenue_by_region.set_index("Region")
+
+            st.bar_chart(
+                chart_data,
+                y="Revenue"
+            )
+        else:
+            st.info("Regional revenue data is unavailable")
+
+    with units_column:
+        st.markdown("##### Units Sold by Region")
+
+        if not units_by_region.empty:
+            chart_data = units_by_region.set_index("Region")
+
+            st.bar_chart(
+                chart_data,
+                y="Units Sold",
+            )
+        else:
+            st.info("Regional units sold data is unavailable.")
