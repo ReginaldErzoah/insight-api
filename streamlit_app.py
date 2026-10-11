@@ -434,3 +434,19 @@ with region_tab:
             )
         else:
             st.info("Regional units sold data is unavailable.")
+
+
+with monthly_tab:
+    st.subheader("Monthly Sales Performance")
+
+    st.markdown("##### Monthly Revenue")
+
+    if not revenue_by_month.empty:
+        chart_data = revenue_by_month.set_index("Month")
+
+        st.line_chart(
+            chart_data,
+            y = "Revenue",
+        )
+    else:
+        st.info("Monthly revenue data is unavailable.")
