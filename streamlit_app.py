@@ -207,3 +207,28 @@ if (summary is None and products is None and regions is None and monthly is None
     )
     st.stop()
 
+
+revenue_by_product = pd.DataFrame(
+    columns=["Product", "Revenue"]
+)
+
+units_by_product = pd.DataFrame(
+    columns=["Product", "Units Sold"]
+)
+
+revenue_by_region = pd.DataFrame(
+    columns=["Region", "Revenue"]
+)
+
+units_by_region = pd.DataFrame(
+    columns=["Region", "Units Sold"]
+)
+
+revenue_by_month = pd.DataFrame(
+    columns=["Month", "Revenue"]
+)
+
+units_by_month = pd.DataFrame(
+    columns=["Month", "Units Sold"]
+)
+
