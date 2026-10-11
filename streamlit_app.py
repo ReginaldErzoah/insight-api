@@ -509,3 +509,10 @@ with data_tab:
        ) 
     else:
         st.info("Monthly revenue data is unavailable.")
+
+
+st.divider()
+
+st.caption(
+    "InsightAPI | Sales Analytics powered by FastAPI & Streamlit"
+)
