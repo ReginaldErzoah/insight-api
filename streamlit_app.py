@@ -93,3 +93,35 @@ def show_metric(label, value, help_text = None):
         value = value,
         help = help_text,
     )
+
+
+with st.sidebar:
+    st.title("insightAPI")
+    st.caption("Sales Analytics Platform")
+
+    st.divider()
+
+    st.subheader("Backend Status")
+
+    api_is_healthy, health_error = check_api_health()
+
+    if api_is_healthy:
+        st.success("API is connected")
+    else:
+        st.error("API unavailable")
+        st.caption(
+            "Start FastAPI and refresh this page to reconnect."
+        )
+
+        with st.expander("Connection details"):
+            st.code(health_error or "Unknown connection error")
+
+    st.divider()
+
+    refresh_clicked = st.button(
+        "Refresh dashboard",
+        use_container_width = True,
+    )
+
+    if refresh_clicked:
+        st.rerun()
