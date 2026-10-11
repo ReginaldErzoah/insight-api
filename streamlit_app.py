@@ -125,3 +125,16 @@ with st.sidebar:
 
     if refresh_clicked:
         st.rerun()
+
+
+st.title("Sales Performance Analytics")
+
+
+st.markdown(
+    """
+    Explore revenue, sales volume, product performance, regional performance, and 
+    monthly trends using data supplied by the InsightAPI backend.
+    """
+)
+
+st.caption("Data Source: FastAPI sales analytics endpoints")
