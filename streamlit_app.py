@@ -498,3 +498,14 @@ with data_tab:
         st.info("Regional revenue data is unavailable.")
 
     st.divider()
+
+    st.markdown("##### Monthly Revenue")
+
+    if not revenue_by_month.empty:
+       st.dataframe(
+           revenue_by_month,
+           use_container_width=True,
+           hide_index=True,        
+       ) 
+    else:
+        st.info("Monthly revenue data is unavailable.")
