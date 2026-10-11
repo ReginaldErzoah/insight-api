@@ -59,7 +59,7 @@ def check_api_health():
     return True, None
 
 
-def series_to_dict(data, category_name, value_name):
+def series_to_dataframe(data, category_name, value_name):
     """Convert an API dictionary into a chart-ready DataFrame."""
 
     if not isinstance(data,dict) or not data:
@@ -232,3 +232,44 @@ units_by_month = pd.DataFrame(
     columns=["Month", "Units Sold"]
 )
 
+
+if products is not None:
+    revenue_by_product = series_to_dataframe(
+        products.get("revenue_by_product", {}),
+        "Product",
+        "Revenue",
+    )
+
+    units_by_product = series_to_dataframe(
+        products.get("units_by_product", {}),
+        "Product",
+        "Units Sold",
+    )
+
+
+if regions is not None:
+    revenue_by_region = series_to_dataframe(
+        regions.get("revenue_by_region", {}),
+        "Region",
+        "Revenue",
+    )
+
+    units_by_region = series_to_dataframe(
+        regions.get("units_by_region", {}),
+        "Region",
+        "Units Sold",
+    )
+
+
+if monthly is not None:
+    revenue_by_month = series_to_dataframe(
+        monthly.get("revenue_by_month", {}),
+        "Month",
+        "Revenue",
+    )
+
+    units_by_month = series_to_dataframe(
+        monthly.get("units_by_month", {}),
+        "Month",
+        "Units Sold",
+    )
