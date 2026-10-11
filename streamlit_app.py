@@ -450,3 +450,15 @@ with monthly_tab:
         )
     else:
         st.info("Monthly revenue data is unavailable.")
+
+    st.markdown("##### Monthly Units Sold")
+
+    if not units_by_month.empty:
+        chart_data = units_by_month.set_index("Month")
+
+        st.line_chart(
+            chart_data,
+            y = "Units Sold",
+        )
+    else:
+        st.info("Monthly units sold data unavailble")
