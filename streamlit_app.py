@@ -346,5 +346,18 @@ with overview_tab:
         else:
             st.info("Product revenue data is unavailable.")
 
+    with region_column:
+        st.markdown("##### Revenue by Region")
+
+        if not revenue_by_region.empty:
+            chart_data = revenue_by_region.set_index("Region")
+
+            st.bar_chart(
+                chart_data,
+                y = "Revenue",
+            )
+        else:
+            st.info("Regional revenue data is unavailable.")
+
     
                             
