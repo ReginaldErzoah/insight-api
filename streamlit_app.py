@@ -321,3 +321,28 @@ if top_product_data is not None:
         st.success(f"Top product by revenue: **{best_product}**")
                    
 st.divider()
+
+
+overview_tab, product_tab, region_tab, monthly_tab, data_tab = st.tabs(
+    ["Overiew", "Products", "Regions", "Monthly Trends", "Data Explorer"]
+)
+
+
+with overview_tab:
+    st.subheader("Sales performance at a glance")
+
+    chart_column, region_column = st.columns(2)
+
+    with chart_column:
+        st.markdown("##### Revenue by Product")
+
+        if not revenue_by_product.empty:
+            chart_data = revenue_by_product.set_index("Product")
+
+            st.bar_chart(
+                chart_data,
+                y="Revenue",
+            )
+        else:
+            st.info("Product revenue data is unavailable.")
+                            
