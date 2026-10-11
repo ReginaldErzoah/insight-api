@@ -178,3 +178,24 @@ for endpoint_name, error in endpoint_errors.items():
         st.warning(
             f"{endpoint_name} could not be loaded: {error}"
         )
+
+
+if summary is not None and not isinstance(summary,dict):
+    st.warning("The summary endpoint returned an unexpected response.")
+    summary = None
+
+if products is not None and not isinstance(products,dict):
+    st.warning("The products endpoint returned an unexpected response.")
+    products = None
+
+if regions is not None and not isinstance(regions,dict):
+    st.warning("The regions endpoint returned an unexpected response.")
+    regions = None
+
+if monthly is not None and not isinstance(monthly,dict):
+    st.warning("The monthly endpoint returned an unexpected response.")
+    monthly = None
+
+if top_product_data is not None and not isinstance(top_product_data,dict):
+    st.warning("The top product endpoint returned an unexpected response.")
+    top_product_data = None
