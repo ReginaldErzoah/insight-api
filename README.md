@@ -40,7 +40,7 @@ This project is part of my journey toward Data Engineering, DataOps, and MLOps, 
 
 ## Dataset and Data Source
 
-Insight API uses synthetic sales data generated for deminstration.
+Insight API uses synthetic sales data generated for deminstration, development, and testing purposes.
 
 ## Architecture
 
