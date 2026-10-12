@@ -38,6 +38,8 @@ This project is part of my journey toward Data Engineering, DataOps, and MLOps, 
 - **Continuous deployment:** Automatically builds and pushes a commit-specific image to Google Artifact Registry and deploys the API and dashboard to Cloud Run after successful CI on pushes to `main`.
 - **Secure cloud authentication:** Uses Workload Identity Federation to authenticate GitHub Actions to Google Cloud without storing a long-lived service-account key in GitHub.
 
+## Dataset and Data Source
+
 ## Architecture
 
 ### Application architecture
