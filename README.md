@@ -45,6 +45,8 @@ The dataset does not represent actual transactions or financial performance of a
 
 The dataset includes fields such as date, product, region, units_sold, and revenue.
 
+The data
+
 ## Architecture
 
 ### Application architecture
