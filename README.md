@@ -45,7 +45,7 @@ The dataset does not represent actual transactions or financial performance of a
 
 The dataset includes fields such as date, product, region, units_sold, and revenue.
 
-The data demonstrates sales data processing, analytical calculations, REST API development,
+The data demonstrates sales data processing, analytical calculations, REST API development, automated testing, and dashboard
 
 ## Architecture
 
