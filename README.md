@@ -41,6 +41,8 @@ This project is part of my journey toward Data Engineering, DataOps, and MLOps, 
 ## Dataset and Data Source
 
 Insight API uses synthetic sales data generated for deminstration, development, and testing purposes.
+The dataset does not represent actual transactions or financial performance of a real business.
+
 The dataset includes fields such as date, product, region, units_sold, and revenue.
 
 ## Architecture
